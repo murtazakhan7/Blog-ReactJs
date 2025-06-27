@@ -1,8 +1,13 @@
 import React from 'react'
+import Feed from './Feed.js'
 
-const Home = () => {
+const Home = ({posts}) => {
   return (
-    <h1>Home</h1>
+    <>
+    
+  { posts.map(post => <li style={{listStyle:'none', marginLeft:'12px'}} key={post.id}> <Feed post={post}/> 
+  </li>)}
+  </>
   )
 }
 

@@ -1,25 +1,28 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
+import './Nav.css'
 
-const Nav = ({Search,setSearch}) => {
+const Nav = ({Search, setSearch}) => {
   return (
-    <nav>
-    <form onSubmit={(e) => e.preventDefault}>
-      <label htmlFor="search"></label>
-      <input
-      id='search'
-      type='text'
-      placeholder='Search Posts'
-      value={Search}
-      onChange={(e) => setSearch(e.target.value)}
-
-      />
-    </form>
-    <ul>
-      <Link to='/'>Home</Link>
-      <Link to = './newpost'>New Post</Link>
-      <Link to= './about'>About</Link>
-    </ul>
+    <nav className="navbar">
+      <div className="nav-search-container">
+        <form onSubmit={e => e.preventDefault()}>
+          <input
+            id='search'
+            type='text'
+            placeholder='Search Posts'
+            value={Search}
+            onChange={e => setSearch(e.target.value)}
+          />
+        </form>
+      </div>
+      <div className="nav-links-container">
+        <ul>
+          <Link className="nav-link" to='/'>Home</Link>
+          <Link className="nav-link" to = './newpost'>New Post</Link>
+          <Link className="nav-link" to= './about'>About</Link>
+        </ul>
+      </div>
     </nav>
   )
 }

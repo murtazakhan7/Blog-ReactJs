@@ -1,25 +1,22 @@
 import React from 'react'
 import { useParams } from 'react-router-dom'
+import './PostPage.css'
 
 const PostPage = ({posts,handleDelete}) => {
   const {id} = useParams()
   const post = posts.find(post => (post.id).toString() === id)
   return (
-
-    <div>
+    <div className="post-page">
      {post && 
-     <>
+     <div className="post-content">
       <h2>{post.title}</h2>
       <h6> {post.body} </h6>
       <p>{post.date} </p> 
        <button  onClick={handleDelete}>Edit Post</button>
        <button onClick={() =>handleDelete(post.id)}>Delete</button>
-       </>
+       </div>
   }
     </div>
-
-   
-    
   )
 }
 

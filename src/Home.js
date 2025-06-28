@@ -1,13 +1,16 @@
 import React from 'react'
 import Feed from './Feed.js'
+import './Home.css'
 
 const Home = ({posts}) => {
   return (
-    <>
-    
-  { posts.map(post => <li style={{listStyle:'none', marginLeft:'12px'}} key={post.id}> <Feed post={post}/> 
-  </li>)}
-  </>
+    <div className="home-container">
+      { posts.map(post => (
+        <div className="home-content" key={post.id}>
+          <Feed post={post}/>
+        </div>
+      ))}
+    </div>
   )
 }
 

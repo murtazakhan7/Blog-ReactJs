@@ -1,4 +1,4 @@
-import Header from './Header.js'
+import './App.css';
 import Home from './Home.js'
 import PostPage from './PostPage.js'
 import Nav from './Nav.js'
@@ -9,7 +9,6 @@ import Footer from './Footer.js'
 import { Routes, Route, useNavigate } from 'react-router-dom'
 import { useEffect, useState } from 'react'
 import { format } from 'date-fns';
-
 
 function App() {
   const [posts, SetPosts] = useState([
@@ -38,8 +37,6 @@ function App() {
     }
   ])
 
-
-
   const [Search, setSearch] = useState('')
   const [NewTitle, setNewTitle] = useState('')
   const [NewBody, SetNewBody] = useState('')
@@ -53,7 +50,6 @@ function App() {
     SetSearchResults(ResultPosts)
   }
     , [Search, posts])
-
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -89,11 +85,11 @@ function App() {
     navigate('/')
   }
 
-
-
   return (
-    <div>
-      <Header title='JS Bog Post' />
+    <div className="app-container">
+      <header className="blog-header">
+        React JS Blog
+      </header>
       <Nav Search={Search} setSearch={setSearch} />
       <Routes>
         <Route path='/' element={<Home posts={searchResults} />} />
@@ -107,12 +103,8 @@ function App() {
         />} />
         <Route path='/post/:id' element={<PostPage handleDelete={handleDelete} posts={posts}/>} />
         <Route path='*' element={<Missing />} />
-
       </Routes>
-
       <Footer />
-
-
     </div>
   );
 }

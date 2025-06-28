@@ -68,7 +68,7 @@ function App() {
          date: format(currentDate, 'PPP')
          }
 
-      console.log(newPost)
+    
       const allPosts = [...posts, newPost]
       SetPosts(allPosts)
     } catch (error) {
@@ -77,10 +77,17 @@ function App() {
     finally {
       setNewTitle('')
       SetNewBody('')
-      navigate('/')
+       navigate('/')
     }
   }
 
+  const handleDelete= (id) =>{
+    const newposts = posts.filter(post => post.id !== id)
+
+    console.log(newposts)
+    SetPosts(newposts)
+    navigate('/')
+  }
 
 
 
@@ -98,7 +105,7 @@ function App() {
           SetNewBody={SetNewBody}
           handleSubmit={handleSubmit}
         />} />
-        <Route path='/post/:id' element={<PostPage />} />
+        <Route path='/post/:id' element={<PostPage handleDelete={handleDelete} posts={posts}/>} />
         <Route path='*' element={<Missing />} />
 
       </Routes>

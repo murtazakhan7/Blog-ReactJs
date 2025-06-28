@@ -1,0 +1,53 @@
+/* App.css */
+.app-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  max-width: 100%;
+  justify-content: flex-start;
+  align-items: stretch;
+  background: #f8f9fa;
+  overflow-x: hidden;
+}
+
+.app-container > * {
+  width: 100%;
+}
+
+.app-container > *:hover {
+}
+
+.search-bar-container {
+  width: 100vw;
+  display: flex;
+  justify-content: flex-start;
+  padding-left: 2vw;
+  margin-bottom: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+.search-bar-container input[type="text"] {
+  width: 260px;
+  height: 38px;
+  font-size: 1.1rem;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+}
+
+.search-bar-container input[type="text"]:focus {
+  border: 2px solid #3a5a98;
+}
+
+.blog-header {
+  max-width: 100%;
+  background: linear-gradient(90deg, #5ec6fa 0%, #4ea1d3 100%);
+  color: #111;
+  font-size: 2rem;
+  font-weight: bold;
+  text-align: left;
+  padding: 0.7rem 2vw 0.7rem 2vw;
+  letter-spacing: 1px;
+  font-family: 'Segoe UI', Arial, sans-serif;
+  box-sizing: border-box;
+} 

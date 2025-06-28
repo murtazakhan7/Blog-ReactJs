@@ -1,0 +1,20 @@
+/* About.css */
+.about-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: 0;
+  width: 100vw;
+  background: #f0efeb;
+  overflow: hidden;
+}
+
+.about-content {
+  background: #fff;
+  padding: 2rem;
+  border-radius: 8px;
+  border: 1px solid #e0e0e0;
+}
+
+.about-content:hover {
+} 

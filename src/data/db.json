@@ -1,0 +1,10 @@
+{
+  "posts": [
+    {
+      "id": "1",
+      "title": "welcome to the future",
+      "body": "hello",
+      "date": "June 29th, 2025"
+    }
+  ]
+}

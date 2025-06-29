@@ -4,7 +4,7 @@ import './PostPage.css'
 
 const PostPage = ({posts,handleDelete}) => {
   const {id} = useParams()
-  const post = posts.find(post => (post.id).toString() === id)
+  const post = posts.find(post => (post.id) === id)
   return (
     <div className="post-page">
      {post && 
@@ -12,9 +12,19 @@ const PostPage = ({posts,handleDelete}) => {
       <h2>{post.title}</h2>
       <h6> {post.body} </h6>
       <p>{post.date} </p> 
-     <Link to = {`/newpost/${id}`}>   <button  onClick={handleDelete}>Edit Post</button> </Link>
-       <button onClick={() =>handleDelete(post.id)}>Delete</button>
+     <Link to = {`/editpost/${post.id}`}> 
+      <button >Edit Post</button> </Link>
+
+       <button onClick={(e) => {e.preventDefault();
+       handleDelete(post.id)}}>Delete</button>
        </div>
+  }
+  {!post &&
+  <>
+  <h2>Post Does Not Exit</h2>
+  <Link to = '/'>Visit our Home Page</Link>
+  </>
+  
   }
     </div>
   )

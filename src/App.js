@@ -10,40 +10,41 @@ import { Routes, Route, useNavigate } from 'react-router-dom'
 import { useEffect, useState } from 'react'
 import { format } from 'date-fns';
 import EditPost from './EditPost.js';
+import api from './api/posts.js'
 
 function App() {
-  const [posts, SetPosts] = useState([
-    {
-      id: 1,
-      title: "My First Post",
-      body: "Hello to the future",
-      date: "January 2025, 12, 12:12pm"
-    }, {
-      id: 2,
-      title: "My Second Post",
-      body: " No Succes, No Life",
-      date: "January 2025, 12, 12:12pm"
-    },
-    {
-      id: 3,
-      title: "My Third Post",
-      body: " Failure is the key to Failure",
-      date: "January 2025, 12, 12:12pm"
-    }, {
-
-      id: 4,
-      title: "My Fourth Post",
-      body: " God Knows Best",
-      date: "January 2025, 12, 12:12pm"
-    }
-  ])
-
+  const [posts, SetPosts] = useState([])
   const [Search, setSearch] = useState('')
   const [NewTitle, setNewTitle] = useState('')
   const [NewBody, setNewBody] = useState('')
-
-  const navigate = useNavigate()
+  const [editTitle, seteditTitle] = useState('')
+  const [editBody, seteditBody] = useState('')
+  const [reload, setReload] = useState(false);
   const [searchResults, SetSearchResults] = useState([])
+
+  const currentDate = new Date()
+  const navigate = useNavigate()
+
+
+  useEffect(() => {
+    const getData = async () => {
+      try {
+        const response = await api.get('/posts')
+
+        SetPosts(response.data);
+
+
+     
+
+      }
+      catch (err) {
+
+        console.log(err.message)
+      }
+    }
+    getData()
+
+  }, [reload])
 
   useEffect(() => {
     const ResultPosts = posts.filter(post => ((post.body.toLocaleLowerCase().includes(Search.toLocaleLowerCase())) || (post.title.toLowerCase().includes(Search.toLocaleLowerCase()))))
@@ -52,38 +53,71 @@ function App() {
   }
     , [Search, posts])
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    const currentDate = new Date()
-    
-    const id = posts.length ? posts[posts.length - 1].id + 1 : 1
-    try {
-      const newPost = {
-         id: id, 
-         title: NewTitle, 
-         body: NewBody, 
-         date: format(currentDate, 'PPP')
-         }
 
-    
-      const allPosts = [...posts, newPost]
-      SetPosts(allPosts)
-    } catch (error) {
-      console.log(error)
+    const id = posts.length ? (Number(posts[posts.length - 1].id) + 1) : 1
+    const StrId = id.toString()
+
+    const newPost = {
+      id: StrId,
+      title: NewTitle,
+      body: NewBody,
+      date: format(currentDate, 'PPP')
     }
-    finally {
+  
+
+    try {
+      const response = await api.post('/posts', newPost)
+     
+      const allPosts = [...posts, response.data]
+      SetPosts(allPosts)
       setNewTitle('')
       setNewBody('')
-       navigate('/')
+      navigate('/')
+    }
+    catch (error) {
+      console.log(error.message)
+    }
+
+
+  }
+
+  const handleEdit = async (id) => {
+    const editPost = {
+      id,
+      title: editTitle,
+      body: editBody,
+      date: format(currentDate, 'PPP')
+    }
+    try {
+      const response = await api.put(`/posts/${id}`, editPost)
+      const updatedPosts = posts.map(post => (post.id) === id ? {...response.data} : post)
+     SetPosts(updatedPosts)
+     seteditBody('')
+     seteditBody('')
+     navigate('/')
+     
+    }
+    catch (error) {
+      console.log(error.message)
     }
   }
 
-  const handleDelete= (id) =>{
-    const newposts = posts.filter(post => post.id !== id)
 
-    console.log(newposts)
-    SetPosts(newposts)
-    navigate('/')
+  const handleDelete = async (id) => {
+    const newposts = posts.find(post => post.id === id)
+    
+    try {
+      const response = await api.delete(`/posts/${id}`)
+
+      console.log('Resource deleted successfully:', response.status)
+      setReload(prev => !prev);
+      navigate('/')
+    }
+    catch (error) {
+      console.log(error.message)
+    }
   }
 
   return (
@@ -102,14 +136,25 @@ function App() {
           setNewBody={setNewBody}
           handleSubmit={handleSubmit}
         />} />
-        <Route path='/post/:id' element={<PostPage handleDelete={handleDelete} posts={posts}/>} />
-        <Route path = '/newpost/:id' element={<EditPost  
+        <Route path='/post/:id' element={<PostPage handleDelete={handleDelete} posts={posts} />} />
+       <Route
+  path="/editpost/:id"
+  element={
+    posts.length > 0 ? (
+      <EditPost
         posts={posts}
-        NewTitle={NewTitle}
-          setNewTitle={setNewTitle}
-          NewBody={NewBody}
-          setNewBody={setNewBody}
-          handleSubmit={handleSubmit}/>} />
+        editTitle={editTitle}
+        editBody={editBody}
+        seteditTitle={seteditTitle}
+        seteditBody={seteditBody}
+        handleEdit={handleEdit}
+      />
+    ) : (
+      <p>Loading...</p>
+    )
+  }
+/>
+
         <Route path='*' element={<Missing />} />
       </Routes>
       <Footer />

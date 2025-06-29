@@ -9,6 +9,7 @@ import Footer from './Footer.js'
 import { Routes, Route, useNavigate } from 'react-router-dom'
 import { useEffect, useState } from 'react'
 import { format } from 'date-fns';
+import EditPost from './EditPost.js';
 
 function App() {
   const [posts, SetPosts] = useState([
@@ -39,7 +40,7 @@ function App() {
 
   const [Search, setSearch] = useState('')
   const [NewTitle, setNewTitle] = useState('')
-  const [NewBody, SetNewBody] = useState('')
+  const [NewBody, setNewBody] = useState('')
 
   const navigate = useNavigate()
   const [searchResults, SetSearchResults] = useState([])
@@ -72,7 +73,7 @@ function App() {
     }
     finally {
       setNewTitle('')
-      SetNewBody('')
+      setNewBody('')
        navigate('/')
     }
   }
@@ -98,10 +99,17 @@ function App() {
           NewTitle={NewTitle}
           setNewTitle={setNewTitle}
           NewBody={NewBody}
-          SetNewBody={SetNewBody}
+          setNewBody={setNewBody}
           handleSubmit={handleSubmit}
         />} />
         <Route path='/post/:id' element={<PostPage handleDelete={handleDelete} posts={posts}/>} />
+        <Route path = '/newpost/:id' element={<EditPost  
+        posts={posts}
+        NewTitle={NewTitle}
+          setNewTitle={setNewTitle}
+          NewBody={NewBody}
+          setNewBody={setNewBody}
+          handleSubmit={handleSubmit}/>} />
         <Route path='*' element={<Missing />} />
       </Routes>
       <Footer />

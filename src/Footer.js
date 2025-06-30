@@ -1,10 +1,12 @@
-import React from 'react'
 import './Footer.css';
+import { useStoreState } from 'easy-peasy';
 
 const Footer = () => {
+  const postCount  = useStoreState(state => state.postCount)
+
   return (
     <footer className="footer">
-      <span className="footer-copyright">© 2025</span>
+     <p>{postCount}</p>  |  <span className="footer-copyright">© 2025</span>
     </footer>
   )
 }

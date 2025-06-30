@@ -1,10 +1,22 @@
 import React from 'react'
-import { useParams, Link } from 'react-router-dom'
+import { useParams, Link, useNavigate } from 'react-router-dom'
 import './PostPage.css'
+import { useStoreActions,useStoreState } from 'easy-peasy';
 
-const PostPage = ({posts,handleDelete}) => {
+const PostPage = () => {
+  const navigate = useNavigate()
   const {id} = useParams()
-  const post = posts.find(post => (post.id) === id)
+  const getPostById = useStoreState(state => state.getPostById)
+    const deletePost = useStoreActions(actions => actions.deletePost)
+
+  const post = getPostById(id)
+//  const post = posts.find(post => (post.id) === id)
+  const handleDelete = (id) => {
+    deletePost(id)
+    navigate('/')
+   
+  }
+
   return (
     <div className="post-page">
      {post && 

@@ -1,8 +1,12 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 import './Nav.css'
+import { action, useStoreActions,useStoreState } from 'easy-peasy';
 
-const Nav = ({Search, setSearch}) => {
+const Nav = () => {
+  const {Search} = useStoreState(state => state.Search)
+  const {setSearch} = useStoreActions(actions => actions.setSearch)
+
   return (
     <nav className="navbar">
       <div className="nav-search-container">

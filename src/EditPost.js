@@ -1,34 +1,84 @@
 import React, { useEffect } from 'react'
-import { useParams,Link } from 'react-router-dom'
+import { useParams,Link, useNavigate } from 'react-router-dom'
+import { useStoreActions,useStoreState } from 'easy-peasy';
+import { format } from 'date-fns';
 
-const EditPost = ({posts,editTitle,editBody,seteditTitle,seteditBody,handleEdit}) => {
+const EditPost = () => {
+
+  const navigate = useNavigate()
+  const currentDate = new Date()
+  const {id} = useParams()
  
-    const {id} = useParams()
-    const post = posts.find(post => Number(post.id) === Number(id))
-    console.log(post)
-   
+
+    const {editTitle,editBody,isLoading} = useStoreState(state => ({
+   editTitle: state.editTitle,
+   editBody: state.editBody,
+   isLoading: state.isLoading,
+  
+
+  }))
+   const post = useStoreState(state => state.getPostById(id));
+
+
+
+    const {seteditTitle,seteditBody,updatedPost,setIsLoading} = useStoreActions(actions => ({
+   seteditTitle: actions.seteditTitle,
+   seteditBody: actions.seteditBody,
+   updatedPost: actions.updatedPost,
+   setIsLoading: actions.setIsLoading
+
+  }))
  
+
+    
+
+
+
+  
     useEffect(() =>{
-      if(post && post.title !== editTitle){
+     setIsLoading(true)
+      if(!post) return 
+
+        console.log(post)
+        setIsLoading(true)
         console.log('Setting title/body from post:', post);
       seteditTitle(post.title)
+      console.log(post.title)
       seteditBody(post.body)
       console.log({ seteditTitle, seteditBody });
+      setIsLoading(false)
 
+
+},[post,seteditBody,seteditTitle,setIsLoading])
+
+   const handleEdit = (id) => {
+      const editPost = {
+        id,
+        title: editTitle,
+        body: editBody,
+        date: format(currentDate, 'PPP')
       }
-      else{
-     console.log("Error setiing ..")
-      }
-    },[post,seteditBody,seteditTitle])
+      updatedPost(editPost)
+      navigate('/')
+    }
+  
+   
+if (!post && !isLoading) {
+    return (
+      <div className="new-post-container">
+        <h2>Post Does Not Exist</h2>
+        <Link to="/">Visit our Home Page</Link>
+      </div>
+    );
+  }
+ 
   return (
 
-      
-         
        <div className="new-post-container">
+         {isLoading ? (
+        <p>Loading…</p>
+      ) : (
        
-          { post ? (
-        
-          
           <form className="new-post-form" onSubmit={(e) =>{ e.preventDefault();
             handleEdit(id);
           }
@@ -48,22 +98,11 @@ const EditPost = ({posts,editTitle,editBody,seteditTitle,seteditBody,handleEdit}
                 onChange={(e) => seteditBody(e.target.value)}
                 placeholder="Body"
            />
-             <button onClick={(e) => {
-              e.preventDefault()
-              handleEdit(post.id)
-             }}>Edit Post</button>
+             <button type='submit'>Edit Post</button>
         </form>
-          )
+          
       
- : (
-<>
-
-<h2>Post Does Not Exit</h2>
-<Link to = '/'>Visit our Home Page</Link>
-
-</>
-) }
-
+            )}
        </div>
        
     )
